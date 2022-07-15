@@ -1,0 +1,10 @@
+{
+  "NOT_EMPTY": "{property} should not be empty",
+  "INVALID_EMAIL": "email is invalid",
+  "INVALID_BOOLEAN": "{property} is not a boolean",
+  "MIN": "{property}'s value: \"{value}\", it's length should great then {constraints.0}, ow and {message}",
+  "MAX": "{property}'s value: \"{value}\", it's length should less then {constraints.0}, ow and {message}",
+  "DEFAULT_VERSION": "common error during all version",
+  "REQUEST_PARAM_VALIDATION_FAILED": "request params validation failed",
+  "whitelistValidation": "property {property} should not exist"
+}
