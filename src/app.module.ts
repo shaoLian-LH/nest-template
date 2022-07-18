@@ -41,6 +41,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           database: dbConfig.database,
           username: dbConfig.username,
           password: dbConfig.password,
+          debug: process.env.NODE_ENV === 'development',
         };
       },
     }),

@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { i18nValidationErrorFactory } from 'nestjs-i18n';
@@ -6,8 +7,10 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { I18nExceptionFilter } from './common/filters/i18n-exception.filter';
 import { AppModule } from './app.module';
+import chalk = require('chalk');
 
 async function bootstrap() {
+  const logger = new Logger();
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   // 接口参数检查
@@ -38,8 +41,17 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .build();
   const docs = SwaggerModule.createDocument(app, docsConfig);
-  SwaggerModule.setup('/swagger/common', app, docs);
+  const swaggerPrefix = '/swagger';
+  SwaggerModule.setup(swaggerPrefix, app, docs);
 
-  await app.listen(3000);
+  const mainAppPort = 3000;
+  await app.listen(mainAppPort).then(() => {
+    const protocolAndIp = `http://localhost`;
+    const swaggerTag = swaggerPrefix.replace(/^\//, '');
+    const swaggerAddress = `${protocolAndIp}:${mainAppPort}/${swaggerTag}`;
+    logger.log(
+      `${chalk.yellow('[SwaggerDocs]')} ${chalk.green(swaggerAddress)}`,
+    );
+  });
 }
 bootstrap();
