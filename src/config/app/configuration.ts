@@ -6,8 +6,16 @@ export interface IMysqlDatabaseConfiguration {
   database: string;
 }
 
+export interface IJwtConfiguration {
+  secret: string;
+  signOptions: {
+    expiresIn: string;
+  };
+}
+
 export interface IConfiguration {
   mysql: IMysqlDatabaseConfiguration;
+  jwt: IJwtConfiguration;
 }
 
 export const loaderForDevelopment = (): IConfiguration => ({
@@ -17,5 +25,11 @@ export const loaderForDevelopment = (): IConfiguration => ({
     username: 'root',
     password: '123456',
     database: 'subject',
+  },
+  jwt: {
+    secret: 'topSecret',
+    signOptions: {
+      expiresIn: '7d',
+    },
   },
 });

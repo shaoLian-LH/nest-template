@@ -1,0 +1,7 @@
+{
+  "NOT_FOUND": {
+    "one": "{entity} not found",
+    "two": "{entity} not found by id={id}"
+  },
+  "UNAUTHORIZED": "please check your account or password"
+}

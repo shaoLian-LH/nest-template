@@ -9,6 +9,7 @@ import {
   loaderForDevelopment,
 } from './config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SessionModule } from './modules/session/session.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       },
     }),
     UserModule,
+    SessionModule,
   ],
   controllers: [],
   providers: [],

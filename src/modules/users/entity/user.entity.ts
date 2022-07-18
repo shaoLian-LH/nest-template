@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('slfk_user')
 export class User {
@@ -6,8 +6,12 @@ export class User {
   id: string;
 
   @Column({ comment: '用户名称', nullable: false })
+  @PrimaryColumn()
   username: string;
 
   @Column({ comment: '用户密码', nullable: false })
   password: string;
+
+  @Column({ comment: '加密盐值', nullable: false })
+  salt: string;
 }

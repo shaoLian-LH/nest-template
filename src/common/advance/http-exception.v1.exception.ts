@@ -1,7 +1,12 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ICustomHttpEnum,
+  IHttpEnumPayloadMap,
+} from '../enumeration/custom-http.enum';
 
 export class CustomHttpException extends HttpException {
-  private version: string;
+  version: string;
+
   constructor(
     version: string,
     response: string | Record<string, any>,
@@ -10,9 +15,21 @@ export class CustomHttpException extends HttpException {
     super(response, status);
     this.version = version;
   }
+}
 
-  getVersion() {
-    return this.version;
+export class CommonHttpException<
+  T extends HttpStatus,
+> extends CustomHttpException {
+  translated: boolean;
+  payload: Record<string, any>;
+  constructor(
+    httpEnum: ICustomHttpEnum,
+    payload: IHttpEnumPayloadMap<T>,
+    translated = true,
+  ) {
+    super('common', httpEnum.tag, httpEnum.status);
+    this.translated = translated;
+    this.payload = payload;
   }
 }
 

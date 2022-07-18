@@ -6,11 +6,15 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { getI18nContextFromArgumentsHost } from 'nestjs-i18n';
-import { CustomHttpException } from '../advance/http-exception.v1.exception';
+import {
+  CommonHttpException,
+  CustomHttpException,
+} from '../advance/http-exception.v1.exception';
 
-@Catch(CustomHttpException, HttpException)
-export class HttpExceptionFilter<T extends CustomHttpException | HttpException>
-  implements ExceptionFilter
+@Catch(CustomHttpException, CommonHttpException, HttpException)
+export class HttpExceptionFilter<
+  T extends CustomHttpException | CommonHttpException<any> | HttpException,
+> implements ExceptionFilter
 {
   catch(exception: T, host: ArgumentsHost) {
     const i18n = getI18nContextFromArgumentsHost(host);
@@ -29,12 +33,19 @@ export class HttpExceptionFilter<T extends CustomHttpException | HttpException>
     };
 
     if (exception instanceof CustomHttpException) {
-      const version = exception.getVersion();
+      const version = exception.version;
       if (version) {
-        finalResponse.version = exception.getVersion();
+        finalResponse.version = exception.version;
       }
       finalResponse.msg = typeof msg === 'string' ? { msg } : (msg as object);
+    } else if (exception instanceof CommonHttpException) {
+      if (exception.translated) {
+        finalResponse.msg = i18n.t(`http.${exception.message}`, {
+          args: exception.payload,
+        });
+      }
     } else if (exception instanceof HttpException) {
+      console.log('exception - ', exception);
       finalResponse.msg = exception.message;
     }
     response.status(code).json(finalResponse);
