@@ -15,9 +15,10 @@ export class I18nExceptionFilter<T extends I18nValidationException>
     const i18n = getI18nContextFromArgumentsHost(host);
     const requestCtx = host.switchToHttp();
     const response = requestCtx.getResponse<Response>();
-    const { errors } = exception;
+    const { errors = [] } = exception;
     const specialTansKeys = ['whitelistValidation'];
     const newErrors = errors
+      .slice(0, 1)
       .map((error) => {
         const constrainsDictionary = Object.entries(error.constraints);
         if (!constrainsDictionary.length) return undefined;
@@ -28,6 +29,10 @@ export class I18nExceptionFilter<T extends I18nValidationException>
         if (specialTansKeys.includes(transKey)) {
           return i18n.t(`common.${transKey}`, { args });
         }
+        if (transContent.includes('|{')) {
+          const newContents = transContent.split('|');
+          return i18n.t(newContents[0], JSON.parse(newContents[1]) as any);
+        }
         return i18n.t(transContent, { args });
       })
       .filter((notUndefinedValue) => notUndefinedValue);
@@ -35,7 +40,8 @@ export class I18nExceptionFilter<T extends I18nValidationException>
     response.status(400).json({
       code: 50400,
       success: false,
-      data: newErrors,
+      // 只会抛出第一个提示
+      data: newErrors.length ? newErrors[0] : '',
       timestamp: new Date().toISOString(),
       version: i18n.t('common.DEFAULT_VERSION'),
       msg: i18n.t('common.REQUEST_PARAM_VALIDATION_FAILED'),
