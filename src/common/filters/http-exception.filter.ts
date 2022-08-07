@@ -16,7 +16,7 @@ export class HttpExceptionFilter<
   T extends CustomHttpException | CommonHttpException<any> | HttpException,
 > implements ExceptionFilter
 {
-  catch(exception: T, host: ArgumentsHost) {
+  async catch(exception: T, host: ArgumentsHost) {
     const i18n = getI18nContextFromArgumentsHost(host);
     const requestCtx = host.switchToHttp();
     const response = requestCtx.getResponse<Response>();
@@ -32,20 +32,23 @@ export class HttpExceptionFilter<
       msg: {},
     };
 
-    if (exception instanceof CustomHttpException) {
+    if (exception instanceof CommonHttpException) {
+      const { translated = true, customI18Tag } = exception.options || {};
+      if (translated) {
+        finalResponse.msg = i18n.t(
+          customI18Tag || `http.${exception.message}`,
+          {
+            args: exception.payload,
+          },
+        );
+      }
+    } else if (exception instanceof CustomHttpException) {
       const version = exception.version;
       if (version) {
         finalResponse.version = exception.version;
       }
       finalResponse.msg = typeof msg === 'string' ? { msg } : (msg as object);
-    } else if (exception instanceof CommonHttpException) {
-      if (exception.translated) {
-        finalResponse.msg = i18n.t(`http.${exception.message}`, {
-          args: exception.payload,
-        });
-      }
     } else if (exception instanceof HttpException) {
-      console.log('exception - ', exception);
       finalResponse.msg = exception.message;
     }
     response.status(code).json(finalResponse);

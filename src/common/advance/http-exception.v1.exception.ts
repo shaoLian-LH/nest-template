@@ -17,19 +17,28 @@ export class CustomHttpException extends HttpException {
   }
 }
 
+interface CommonHttpExceptionOptions {
+  translated?: boolean;
+  customI18Tag?: string;
+}
+
 export class CommonHttpException<
   T extends HttpStatus,
 > extends CustomHttpException {
-  translated: boolean;
+  options: CommonHttpExceptionOptions;
   payload: Record<string, any>;
   constructor(
     httpEnum: ICustomHttpEnum,
-    payload: IHttpEnumPayloadMap<T>,
-    translated = true,
+    payload: IHttpEnumPayloadMap<T> | Record<string, any>,
+    options?: CommonHttpExceptionOptions,
   ) {
     super('common', httpEnum.tag, httpEnum.status);
-    this.translated = translated;
     this.payload = payload;
+    const exceptionOptions: CommonHttpExceptionOptions = Object.assign(
+      { translated: true },
+      options,
+    );
+    this.options = exceptionOptions;
   }
 }
 

@@ -1,15 +1,15 @@
-import { Body, Post } from '@nestjs/common';
-import { V1Controller } from '../../common/decorators/v1.decorator';
-import { User } from '../users/entity/user.entity';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-
-@V1Controller('auth')
+import { SignResult } from './types.d';
+@ApiTags('权限认证')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  signup(@Body() authCredentialsDto: AuthCredentialsDto): Promise<User> {
+  signup(@Body() authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
     return this.authService.signup(authCredentialsDto);
   }
 }

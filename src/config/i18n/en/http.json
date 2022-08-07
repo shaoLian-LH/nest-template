@@ -3,5 +3,6 @@
     "one": "{entity} not found",
     "two": "{entity} not found by id={id}"
   },
-  "UNAUTHORIZED": "please check your account or password"
+  "UNAUTHORIZED": "please check your account or password",
+  "CREATE": "{entity}: {value} has been created"
 }

@@ -5,7 +5,7 @@
   "compilerOptions": {
     "assets": [
       {
-        "include": "config/**/*",
+        "include": "config/**/**/*",
         "watchAssets": true
       }
     ]

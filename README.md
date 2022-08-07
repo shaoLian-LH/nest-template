@@ -6,7 +6,5 @@
 - [x] @nestjs/config
 - [x] @nestjs/swagger
 - [x] 基于 passport-jwt 的校验
-- [] 事务管理
-- [] 基础auth接口模板
-- [] vitest测试
+- [x] 基础auth接口模板
 

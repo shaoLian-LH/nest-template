@@ -4,14 +4,10 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync, genSaltSync, hashSync } from 'bcrypt';
-import { User } from '../users/entity/user.entity';
 import { CommonHttpException } from '../../common/advance/http-exception.v1.exception';
 import { HTTP_ERROR_FLAG } from '../../common/enumeration/custom-http.enum';
 import { JwtPayload } from './jwt.interface';
-
-export interface ISignInResult {
-  token: string;
-}
+import { SignResult } from './types';
 
 @Injectable()
 export class AuthService {
@@ -21,17 +17,23 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+  async signup(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
     const { username, password } = authCredentialsDto;
     const salt = genSaltSync();
     const saltedPassword = hashSync(password, salt);
-    return this.userRepository.register({
+    const newUser = await this.userRepository.register({
       username: username,
       password: saltedPassword,
     });
+    const token = this.signJwt({ username: newUser.username });
+    return { token };
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<ISignInResult> {
+  signJwt(baseData: JwtPayload) {
+    return this.jwtService.sign(baseData);
+  }
+
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
     const { username, password } = authCredentialsDto;
     const userInfo = await this.userRepository.findOne({ where: { username } });
 
@@ -45,8 +47,7 @@ export class AuthService {
     const comparedResult = compareSync(password, userInfo.password);
 
     if (comparedResult) {
-      const payload: JwtPayload = { username };
-      const accessToken = this.jwtService.sign(payload);
+      const accessToken = this.signJwt({ username });
       return { token: accessToken };
     }
 

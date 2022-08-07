@@ -10,6 +10,7 @@ import {
 } from './config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule } from './modules/session/session.module';
+import { CakesModule } from './modules/cakes/cakes.module';
 
 @Module({
   imports: [
@@ -43,11 +44,13 @@ import { SessionModule } from './modules/session/session.module';
           username: dbConfig.username,
           password: dbConfig.password,
           debug: process.env.NODE_ENV === 'development',
+          logger: 'advanced-console',
         };
       },
     }),
     UserModule,
     SessionModule,
+    CakesModule,
   ],
   controllers: [],
   providers: [],

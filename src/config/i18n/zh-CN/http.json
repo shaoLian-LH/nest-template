@@ -3,5 +3,6 @@
     "one": "{entity} 不存在",
     "two": "无法通过 id={id} 找到对应的 {entity} 数据"
   },
-  "UNAUTHORIZED": "请检查你的账号或者密码"
+  "UNAUTHORIZED": "请检查你的账号或者密码",
+  "CREATE": "{entity}: {value} 已经被创建"
 }
