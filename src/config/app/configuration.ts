@@ -1,4 +1,4 @@
-export interface IMysqlDatabaseConfiguration {
+export interface MysqlDatabaseConfiguration {
   host: string;
   port: number;
   username: string;
@@ -6,19 +6,19 @@ export interface IMysqlDatabaseConfiguration {
   database: string;
 }
 
-export interface IJwtConfiguration {
+export interface JwtConfiguration {
   secret: string;
   signOptions: {
     expiresIn: string;
   };
 }
 
-export interface IConfiguration {
-  mysql: IMysqlDatabaseConfiguration;
-  jwt: IJwtConfiguration;
+export interface Configuration {
+  mysql: MysqlDatabaseConfiguration;
+  jwt: JwtConfiguration;
 }
 
-export const loaderForDevelopment = (): IConfiguration => ({
+export const loaderForDevelopment = (): Configuration => ({
   mysql: {
     host: 'localhost',
     port: 3307,

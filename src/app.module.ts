@@ -4,8 +4,8 @@ import { Module } from '@nestjs/common';
 import { I18nModule, QueryResolver, AcceptLanguageResolver } from 'nestjs-i18n';
 import { join } from 'path';
 import {
-  IConfiguration,
-  IMysqlDatabaseConfiguration,
+  Configuration,
+  MysqlDatabaseConfiguration,
   loaderForDevelopment,
 } from './config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -31,9 +31,9 @@ import { CakesModule } from './modules/cakes/cakes.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService<IConfiguration>) => {
+      useFactory: (configService: ConfigService<Configuration>) => {
         const dbConfig =
-          configService.get<IMysqlDatabaseConfiguration>('mysql');
+          configService.get<MysqlDatabaseConfiguration>('mysql');
         return {
           type: 'mysql',
           autoLoadEntities: true,

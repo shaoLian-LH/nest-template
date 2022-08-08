@@ -5,8 +5,8 @@ import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import {
-  IConfiguration,
-  IJwtConfiguration,
+  Configuration,
+  JwtConfiguration,
 } from '../../config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from '../users/user.repository';
@@ -19,8 +19,8 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService<IConfiguration>) => {
-        const jwtConfiguration = configService.get<IJwtConfiguration>('jwt');
+      useFactory: (configService: ConfigService<Configuration>) => {
+        const jwtConfiguration = configService.get<JwtConfiguration>('jwt');
         return {
           secret: jwtConfiguration.secret,
           signOptions: jwtConfiguration.signOptions,

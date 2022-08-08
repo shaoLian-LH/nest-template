@@ -8,5 +8,6 @@
   "REQUEST_PARAM_VALIDATION_FAILED": "request params validation failed",
   "whitelistValidation": "property {property} should not exist",
   "TYPE_STRING": "the param {property} must be a sting",
-  "AUTH_SIGN_UP": "password is too weak"
+  "AUTH_SIGN_UP": "password is too weak",
+  "Unauthorized": "unauthorized"
 }

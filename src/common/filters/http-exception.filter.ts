@@ -3,6 +3,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { getI18nContextFromArgumentsHost } from 'nestjs-i18n';
@@ -11,9 +12,18 @@ import {
   CustomHttpException,
 } from '../advance/http-exception.v1.exception';
 
-@Catch(CustomHttpException, CommonHttpException, HttpException)
+@Catch(
+  CustomHttpException,
+  CommonHttpException,
+  HttpException,
+  UnauthorizedException,
+)
 export class HttpExceptionFilter<
-  T extends CustomHttpException | CommonHttpException<any> | HttpException,
+  T extends
+    | CustomHttpException
+    | CommonHttpException<any>
+    | HttpException
+    | UnauthorizedException,
 > implements ExceptionFilter
 {
   async catch(exception: T, host: ArgumentsHost) {
@@ -48,6 +58,8 @@ export class HttpExceptionFilter<
         finalResponse.version = exception.version;
       }
       finalResponse.msg = typeof msg === 'string' ? { msg } : (msg as object);
+    } else if (exception instanceof UnauthorizedException) {
+      finalResponse.msg = i18n.t('common.Unauthorized');
     } else if (exception instanceof HttpException) {
       finalResponse.msg = exception.message;
     }

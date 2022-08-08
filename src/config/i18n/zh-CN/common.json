@@ -8,5 +8,6 @@
   "REQUEST_PARAM_VALIDATION_FAILED": "接口传参校验错误",
   "whitelistValidation": "参数 {property} 不应该存在",
   "TYPE_STRING": "参数 {property} 必须为字符串",
-  "AUTH_SIGN_UP": "密码必须存在至少一个大写字母、一个小写字母且长度不小于8"
+  "AUTH_SIGN_UP": "密码必须存在至少一个大写字母、一个小写字母且长度不小于8",
+  "Unauthorized": "用户未认证"
 }
