@@ -8,7 +8,7 @@ export class BaseEntity {
   created_time: Date;
 
   @Column({ comment: '最近更新数据的用户的id', nullable: false })
-  updated_user_id: Date;
+  updated_user_id: string;
 
   @UpdateDateColumn({ comment: '数据最近更新时间' })
   updated_time: Date;
