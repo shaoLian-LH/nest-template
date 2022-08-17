@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cake } from '../../entities/cake.entity';
+import { User } from '../../entities/user.entity';
 import { CakeRepository } from './cakes.repository';
 import { PublishCakeDto } from './dto/publish-cake.dto';
 
@@ -11,7 +12,10 @@ export class CakesService {
     private readonly cakeRepository: CakeRepository,
   ) {}
 
-  async publishCakeUnderBrand(cakeData: PublishCakeDto): Promise<Cake> {
-    return this.cakeRepository.publishCake(cakeData);
+  async publishCakeUnderBrand(
+    cakeData: PublishCakeDto,
+    user: User,
+  ): Promise<Cake> {
+    return this.cakeRepository.publishCake(cakeData, user);
   }
 }
