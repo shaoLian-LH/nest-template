@@ -25,7 +25,7 @@ interface CommonHttpExceptionOptions {
 export class CommonHttpException<
   T extends HttpStatus,
 > extends CustomHttpException {
-  options: CommonHttpExceptionOptions;
+  customOptions: CommonHttpExceptionOptions;
   payload: Record<string, any>;
   constructor(
     httpEnum: ICustomHttpEnum,
@@ -38,7 +38,7 @@ export class CommonHttpException<
       { translated: true },
       options,
     );
-    this.options = exceptionOptions;
+    this.customOptions = exceptionOptions;
   }
 }
 

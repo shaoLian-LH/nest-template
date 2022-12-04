@@ -43,7 +43,7 @@ export class HttpExceptionFilter<
     };
 
     if (exception instanceof CommonHttpException) {
-      const { translated = true, customI18Tag } = exception.options || {};
+      const { translated = true, customI18Tag } = exception.customOptions || {};
       if (translated) {
         finalResponse.msg = i18n.t(
           customI18Tag || `http.${exception.message}`,
