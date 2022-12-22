@@ -1,7 +1,6 @@
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { UserRepository } from './../users/user.repository';
+import { UserRepositoryService } from '../users/user-repository.service';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { CommonHttpException } from '../../common/advance/http-exception.v1.exception';
@@ -12,8 +11,7 @@ import { SignResult } from './types';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    private readonly userRepositoryService: UserRepositoryService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -21,7 +19,7 @@ export class AuthService {
     const { username, password } = authCredentialsDto;
     const salt = genSaltSync();
     const saltedPassword = hashSync(password, salt);
-    const newUser = await this.userRepository.register({
+    const newUser = await this.userRepositoryService.register({
       username: username,
       password: saltedPassword,
     });
@@ -35,7 +33,9 @@ export class AuthService {
 
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
     const { username, password } = authCredentialsDto;
-    const userInfo = await this.userRepository.findOne({ where: { username } });
+    const userInfo = await this.userRepositoryService.findOne({
+      where: { username },
+    });
 
     if (!userInfo) {
       throw new CommonHttpException<HttpStatus.NOT_FOUND>(
