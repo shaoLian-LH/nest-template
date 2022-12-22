@@ -33,7 +33,7 @@ import { CakesModule } from './modules/cakes/cakes.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService<Configuration>) => {
         const dbConfig =
-          configService.get<MysqlDatabaseConfiguration>('mysql');
+          configService.get<MysqlDatabaseConfiguration>('DB_CONFIG');
         return {
           type: 'mysql',
           autoLoadEntities: true,

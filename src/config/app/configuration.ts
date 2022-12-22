@@ -14,13 +14,13 @@ export interface JwtConfiguration {
 }
 
 export interface Configuration {
-  mysql: MysqlDatabaseConfiguration;
+  DB_CONFIG: MysqlDatabaseConfiguration;
   jwt: JwtConfiguration;
 }
 
 export const loaderForDevelopment = (): Configuration => ({
-  mysql: {
-    host: 'localhost',
+  DB_CONFIG: {
+    host: '127.0.0.1',
     port: 3307,
     username: 'root',
     password: '123456',
