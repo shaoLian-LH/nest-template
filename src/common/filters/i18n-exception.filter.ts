@@ -1,9 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
-import {
-  getI18nContextFromArgumentsHost,
-  I18nValidationException,
-} from 'nestjs-i18n';
+import { I18nContext, I18nValidationException } from 'nestjs-i18n';
 
 @Catch(I18nValidationException)
 export class I18nExceptionFilter<T extends I18nValidationException>
@@ -12,7 +9,7 @@ export class I18nExceptionFilter<T extends I18nValidationException>
   catch(exception: T, host: ArgumentsHost) {
     if (!(exception instanceof I18nValidationException)) return;
 
-    const i18n = getI18nContextFromArgumentsHost(host);
+    const i18n = I18nContext.current(host);
     const requestCtx = host.switchToHttp();
     const response = requestCtx.getResponse<Response>();
     const { errors = [] } = exception;
