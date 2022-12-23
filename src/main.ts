@@ -8,10 +8,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { I18nExceptionFilter } from './common/filters/i18n-exception.filter';
 import { AppModule } from './app.module';
 import chalk = require('chalk');
+import { ConfigService } from '@nestjs/config';
+import { AppConfiguration, Configuration } from './config/app/configuration';
 
 async function bootstrap() {
   const logger = new Logger();
   const app = await NestFactory.create(AppModule);
+  const configService = app.get<ConfigService<Configuration>>(ConfigService);
+  const appConfig = configService.get<AppConfiguration>('APP');
+
   app.enableCors();
   // 接口参数检查
   app.useGlobalPipes(
@@ -44,11 +49,10 @@ async function bootstrap() {
   const swaggerPrefix = '/swagger';
   SwaggerModule.setup(swaggerPrefix, app, docs);
 
-  const mainAppPort = 3000;
-  await app.listen(mainAppPort).then(() => {
-    const protocolAndIp = `http://localhost`;
+  const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
+  await app.listen(appConfig.port).then(() => {
     const swaggerTag = swaggerPrefix.replace(/^\//, '');
-    const swaggerAddress = `${protocolAndIp}:${mainAppPort}/${swaggerTag}`;
+    const swaggerAddress = `${protocolAndIp}:${appConfig.port}/${swaggerTag}`;
     logger.log(
       `${chalk.yellow('[SwaggerDocs]')} ${chalk.green(swaggerAddress)}`,
     );

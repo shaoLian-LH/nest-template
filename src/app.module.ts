@@ -6,7 +6,8 @@ import { join } from 'path';
 import {
   Configuration,
   MysqlDatabaseConfiguration,
-  loaderForDevelopment,
+  configForDevelopment,
+  configForProduction,
 } from './config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule } from './modules/session/session.module';
@@ -15,7 +16,11 @@ import { CakesModule } from './modules/cakes/cakes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [loaderForDevelopment],
+      load: [
+        process.env.NODE_ENV === 'production'
+          ? configForProduction
+          : configForDevelopment,
+      ],
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'zh-CN',

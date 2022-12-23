@@ -1,6 +1,7 @@
 # nest-template
+nestjs@^9 + typeorm@^0.3
 
-# 预置内容
+## 预置内容
 - [x] DTO校验 + i18n 支持
 - [x] 返回、报错统一返回信息体
 - [x] @nestjs/config
