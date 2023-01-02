@@ -4,6 +4,9 @@ export interface MysqlDatabaseConfiguration {
   username: string;
   password: string;
   database: string;
+  synchronize: boolean;
+  dropSchema: boolean;
+  debug: boolean;
 }
 
 export interface JwtConfiguration {
@@ -25,6 +28,30 @@ export interface Configuration {
   jwt: JwtConfiguration;
 }
 
+export const configForTest = (): Configuration => ({
+  APP: {
+    protocol: 'http',
+    ip: 'localhost',
+    port: 3000,
+  },
+  DB_CONFIG: {
+    host: '127.0.0.1',
+    port: 3307,
+    username: 'root',
+    password: '123456',
+    database: 'subject_test',
+    synchronize: true,
+    dropSchema: true,
+    debug: false,
+  },
+  jwt: {
+    secret: 'topSecret',
+    signOptions: {
+      expiresIn: '7d',
+    },
+  },
+});
+
 export const configForDevelopment = (): Configuration => ({
   APP: {
     protocol: 'http',
@@ -37,6 +64,9 @@ export const configForDevelopment = (): Configuration => ({
     username: 'root',
     password: '123456',
     database: 'subject',
+    synchronize: true,
+    dropSchema: false,
+    debug: false,
   },
   jwt: {
     secret: 'topSecret',
@@ -57,7 +87,10 @@ export const configForProduction = (): Configuration => ({
     port: 3307,
     username: 'root',
     password: '123456',
-    database: 'subject',
+    database: 'subject_prod',
+    synchronize: false,
+    dropSchema: false,
+    debug: false,
   },
   jwt: {
     secret: 'topSecret',
@@ -66,3 +99,15 @@ export const configForProduction = (): Configuration => ({
     },
   },
 });
+
+export const loadConfig = () => {
+  switch (process.env.NODE_ENV) {
+    case 'production':
+      return [configForProduction];
+    case 'test':
+    case 'e2e':
+      return [configForTest];
+    default:
+      return [configForDevelopment];
+  }
+};

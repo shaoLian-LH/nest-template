@@ -6,8 +6,7 @@ import { join } from 'path';
 import {
   Configuration,
   MysqlDatabaseConfiguration,
-  configForDevelopment,
-  configForProduction,
+  loadConfig,
 } from './config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule } from './modules/session/session.module';
@@ -16,11 +15,7 @@ import { CakesModule } from './modules/cakes/cakes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [
-        process.env.NODE_ENV === 'production'
-          ? configForProduction
-          : configForDevelopment,
-      ],
+      load: loadConfig(),
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'zh-CN',
@@ -42,13 +37,14 @@ import { CakesModule } from './modules/cakes/cakes.module';
         return {
           type: 'mysql',
           autoLoadEntities: true,
-          synchronize: true,
+          synchronize: dbConfig.synchronize,
           host: dbConfig.host,
           port: dbConfig.port,
           database: dbConfig.database,
           username: dbConfig.username,
           password: dbConfig.password,
-          debug: process.env.NODE_ENV === 'development',
+          debug: dbConfig.debug,
+          dropSchema: dbConfig.dropSchema,
           logger: 'advanced-console',
         };
       },
