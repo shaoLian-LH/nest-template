@@ -1,3 +1,3 @@
 export interface SignResult {
-  token: string;
+	token: string;
 }

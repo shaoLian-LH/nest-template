@@ -7,28 +7,28 @@ import { HTTP_ERROR_FLAG } from '../../common/enumeration/custom-http.enum';
 
 @Injectable()
 export class UserRepositoryService extends Repository<User> {
-  constructor(private readonly dataSource: DataSource) {
-    super(User, dataSource.createEntityManager());
-  }
+	constructor(private readonly dataSource: DataSource) {
+		super(User, dataSource.createEntityManager());
+	}
 
-  async register(userData: CreateUserDto): Promise<User> {
-    const hasExisted = await this.findOne({
-      where: {
-        username: userData.username,
-        deleted: 0,
-      },
-    });
+	async register(userData: CreateUserDto): Promise<User> {
+		const hasExisted = await this.findOne({
+			where: {
+				username: userData.username,
+				deleted: 0,
+			},
+		});
 
-    if (hasExisted) {
-      throw new CommonHttpException<HttpStatus.CREATED>(
-        HTTP_ERROR_FLAG.CREATED,
-        { entity: 'user', value: userData.username },
-      );
-    }
+		if (hasExisted) {
+			throw new CommonHttpException<HttpStatus.CREATED>(
+				HTTP_ERROR_FLAG.CREATED,
+				{ entity: 'user', value: userData.username },
+			);
+		}
 
-    const newUser = this.create(userData);
-    await this.save(newUser);
+		const newUser = this.create(userData);
+		await this.save(newUser);
 
-    return newUser;
-  }
+		return newUser;
+	}
 }

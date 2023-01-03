@@ -8,10 +8,10 @@ import { UserService } from './user.service';
 @Controller('users')
 @UseGuards(AuthGuard())
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+	constructor(private readonly userService: UserService) {}
 
-  @Get()
-  async getAllUser(): Promise<Array<User>> {
-    return this.userService.listUsers();
-  }
+	@Get()
+	async getAllUser(): Promise<Array<User>> {
+		return this.userService.listUsers();
+	}
 }

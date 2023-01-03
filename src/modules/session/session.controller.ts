@@ -7,12 +7,12 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('权限认证')
 @Controller('session')
 export class SessionController {
-  constructor(private readonly sessionService: SessionService) {}
+	constructor(private readonly sessionService: SessionService) {}
 
-  @Post()
-  async login(
-    @Body() authCredentialsDto: AuthCredentialsDto,
-  ): Promise<SignResult> {
-    return this.sessionService.login(authCredentialsDto);
-  }
+	@Post()
+	async login(
+		@Body() authCredentialsDto: AuthCredentialsDto,
+	): Promise<SignResult> {
+		return this.sessionService.login(authCredentialsDto);
+	}
 }

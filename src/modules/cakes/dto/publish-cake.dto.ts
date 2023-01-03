@@ -1,4 +1,4 @@
 export interface PublishCakeDto {
-  brand: string;
-  name: string;
+	brand: string;
+	name: string;
 }

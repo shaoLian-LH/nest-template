@@ -7,8 +7,8 @@ import { AuthModule } from '../auth/auth.module';
 import { Cake } from '../../entities/cake.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Cake]), AuthModule],
-  providers: [CakeRepositoryService, CakesService],
-  controllers: [CakesController],
+	imports: [TypeOrmModule.forFeature([Cake]), AuthModule],
+	providers: [CakeRepositoryService, CakesService],
+	controllers: [CakesController],
 })
 export class CakesModule {}

@@ -11,13 +11,13 @@ import { User } from '../../entities/user.entity';
 @Controller('cakes')
 @UseGuards(AuthGuard())
 export class CakesController {
-  constructor(private readonly cakesService: CakesService) {}
+	constructor(private readonly cakesService: CakesService) {}
 
-  @Post()
-  async publishNewCake(
-    @Body() cakeData: PublishCakeDto,
-    @GetUser() user: User,
-  ): Promise<Cake> {
-    return this.cakesService.publishCakeUnderBrand(cakeData, user);
-  }
+	@Post()
+	async publishNewCake(
+		@Body() cakeData: PublishCakeDto,
+		@GetUser() user: User,
+	): Promise<Cake> {
+		return this.cakesService.publishCakeUnderBrand(cakeData, user);
+	}
 }

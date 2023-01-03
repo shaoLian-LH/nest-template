@@ -6,12 +6,12 @@ import { PublishCakeDto } from './dto/publish-cake.dto';
 
 @Injectable()
 export class CakesService {
-  constructor(private readonly cakeRepositoryService: CakeRepositoryService) {}
+	constructor(private readonly cakeRepositoryService: CakeRepositoryService) {}
 
-  async publishCakeUnderBrand(
-    cakeData: PublishCakeDto,
-    user: User,
-  ): Promise<Cake> {
-    return this.cakeRepositoryService.publishCake(cakeData, user);
-  }
+	async publishCakeUnderBrand(
+		cakeData: PublishCakeDto,
+		user: User,
+	): Promise<Cake> {
+		return this.cakeRepositoryService.publishCake(cakeData, user);
+	}
 }

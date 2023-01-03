@@ -4,56 +4,56 @@ import { Module } from '@nestjs/common';
 import { I18nModule, QueryResolver, AcceptLanguageResolver } from 'nestjs-i18n';
 import { join } from 'path';
 import {
-  Configuration,
-  MysqlDatabaseConfiguration,
-  loadConfig,
+	Configuration,
+	MysqlDatabaseConfiguration,
+	loadConfig,
 } from './config/app/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule } from './modules/session/session.module';
 import { CakesModule } from './modules/cakes/cakes.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      load: loadConfig(),
-    }),
-    I18nModule.forRoot({
-      fallbackLanguage: 'zh-CN',
-      loaderOptions: {
-        path: join(__dirname, 'config', 'i18n'),
-        watch: true,
-      },
-      resolvers: [
-        new AcceptLanguageResolver(),
-        new QueryResolver(['lang', 'l']),
-      ],
-    }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<Configuration>) => {
-        const dbConfig =
-          configService.get<MysqlDatabaseConfiguration>('DB_CONFIG');
-        return {
-          type: 'mysql',
-          autoLoadEntities: true,
-          synchronize: dbConfig.synchronize,
-          host: dbConfig.host,
-          port: dbConfig.port,
-          database: dbConfig.database,
-          username: dbConfig.username,
-          password: dbConfig.password,
-          debug: dbConfig.debug,
-          dropSchema: dbConfig.dropSchema,
-          logger: 'advanced-console',
-        };
-      },
-    }),
-    UserModule,
-    SessionModule,
-    CakesModule,
-  ],
-  controllers: [],
-  providers: [],
+	imports: [
+		ConfigModule.forRoot({
+			load: loadConfig(),
+		}),
+		I18nModule.forRoot({
+			fallbackLanguage: 'zh-CN',
+			loaderOptions: {
+				path: join(__dirname, 'config', 'i18n'),
+				watch: true,
+			},
+			resolvers: [
+				new AcceptLanguageResolver(),
+				new QueryResolver(['lang', 'l']),
+			],
+		}),
+		TypeOrmModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: (configService: ConfigService<Configuration>) => {
+				const dbConfig =
+					configService.get<MysqlDatabaseConfiguration>('DB_CONFIG');
+				return {
+					type: 'mysql',
+					autoLoadEntities: true,
+					synchronize: dbConfig.synchronize,
+					host: dbConfig.host,
+					port: dbConfig.port,
+					database: dbConfig.database,
+					username: dbConfig.username,
+					password: dbConfig.password,
+					debug: dbConfig.debug,
+					dropSchema: dbConfig.dropSchema,
+					logger: 'advanced-console',
+				};
+			},
+		}),
+		UserModule,
+		SessionModule,
+		CakesModule,
+	],
+	controllers: [],
+	providers: [],
 })
 export class AppModule {}
