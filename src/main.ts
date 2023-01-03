@@ -10,13 +10,9 @@ import { AppModule } from './app.module';
 import chalk = require('chalk');
 import { ConfigService } from '@nestjs/config';
 import { AppConfiguration, Configuration } from './config/app/configuration';
+import { INestApplication } from '@nestjs/common';
 
-async function bootstrap() {
-  const logger = new Logger();
-  const app = await NestFactory.create(AppModule);
-  const configService = app.get<ConfigService<Configuration>>(ConfigService);
-  const appConfig = configService.get<AppConfiguration>('APP');
-
+export const setAppConfigs = (app: INestApplication) => {
   app.enableCors();
   // 接口参数检查
   app.useGlobalPipes(
@@ -38,6 +34,15 @@ async function bootstrap() {
   app.useGlobalInterceptors(
     new WrapResponseInterceptor(), // 成功操作的内容自动包裹成特定json格式
   );
+};
+
+async function bootstrap() {
+  const logger = new Logger();
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get<ConfigService<Configuration>>(ConfigService);
+  const appConfig = configService.get<AppConfiguration>('APP');
+
+  setAppConfigs(app);
 
   // api文档配置
   const docsConfig = new DocumentBuilder()
@@ -50,6 +55,7 @@ async function bootstrap() {
   SwaggerModule.setup(swaggerPrefix, app, docs);
 
   const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
+
   await app.listen(appConfig.port).then(() => {
     const swaggerTag = swaggerPrefix.replace(/^\//, '');
     const swaggerAddress = `${protocolAndIp}:${appConfig.port}/${swaggerTag}`;

@@ -1,5 +1,8 @@
 {
   "typescript.updateImportsOnFileMove.enabled": "prompt",
   "typescript.preferences.importModuleSpecifier": "relative",
-  "javascript.preferences.importModuleSpecifier": "relative"
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "cSpell.words": [
+    "Aadmin"
+  ]
 }
