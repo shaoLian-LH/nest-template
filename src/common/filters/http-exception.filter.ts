@@ -44,13 +44,15 @@ export class HttpExceptionFilter<
 
 		if (exception instanceof CommonHttpException) {
 			const { translated = true, customI18Tag } = exception.customOptions || {};
-			if (translated) {
-				finalResponse.msg = i18n.t(
-					customI18Tag || `http.${exception.message}`,
-					{
+			const { value } = exception.payload;
+			if (value) {
+				finalResponse.msg = value;
+			} else if (translated) {
+				const transLatedInfo =
+					i18n.t(customI18Tag || `http.${exception.message}`, {
 						args: exception.payload,
-					},
-				);
+					}) || {};
+				finalResponse.msg = transLatedInfo['one'] || transLatedInfo;
 			}
 		} else if (exception instanceof CustomHttpException) {
 			const version = exception.version;
