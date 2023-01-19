@@ -46,6 +46,7 @@ import { CakesModule } from './modules/cakes/cakes.module';
 					debug: dbConfig.debug,
 					dropSchema: dbConfig.dropSchema,
 					logger: 'advanced-console',
+					timezone: '+08:00',
 				};
 			},
 		}),
