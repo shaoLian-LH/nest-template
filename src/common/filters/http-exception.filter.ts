@@ -3,6 +3,7 @@ import {
 	Catch,
 	ExceptionFilter,
 	HttpException,
+	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -17,9 +18,11 @@ import {
 	CommonHttpException,
 	HttpException,
 	UnauthorizedException,
+	NotFoundException,
 )
 export class HttpExceptionFilter<
 	T extends
+		| NotFoundException
 		| CustomHttpException
 		| CommonHttpException<any>
 		| HttpException
@@ -27,9 +30,10 @@ export class HttpExceptionFilter<
 > implements ExceptionFilter
 {
 	async catch(exception: T, host: ArgumentsHost) {
-		const i18n = I18nContext.current(host);
 		const requestCtx = host.switchToHttp();
 		const response = requestCtx.getResponse<Response>();
+
+		const i18n = I18nContext.current(host);
 		const code = exception.getStatus();
 		const msg = exception.getResponse();
 
@@ -38,7 +42,9 @@ export class HttpExceptionFilter<
 			success: false,
 			data: null,
 			timestamp: new Date().toISOString(),
-			version: i18n.t('common.DEFAULT_VERSION') as string,
+			version: i18n
+				? (i18n.t('common.DEFAULT_VERSION') as string)
+				: 'not found',
 			msg: {},
 		};
 
