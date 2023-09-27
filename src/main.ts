@@ -11,6 +11,8 @@ import chalk = require('chalk');
 import { ConfigService } from '@nestjs/config';
 import { AppConfiguration, Configuration } from './config/app/configuration';
 import { INestApplication } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import path = require('path');
 
 export const setAppConfigs = (app: INestApplication) => {
 	app.enableCors();
@@ -38,7 +40,7 @@ export const setAppConfigs = (app: INestApplication) => {
 
 async function bootstrap() {
 	const logger = new Logger();
-	const app = await NestFactory.create(AppModule);
+	const app: NestExpressApplication = await NestFactory.create(AppModule);
 	const configService = app.get<ConfigService<Configuration>>(ConfigService);
 	const appConfig = configService.get<AppConfiguration>('APP');
 
@@ -53,6 +55,9 @@ async function bootstrap() {
 	const docs = SwaggerModule.createDocument(app, docsConfig);
 	const swaggerPrefix = '/swagger';
 	SwaggerModule.setup(swaggerPrefix, app, docs);
+	app.useStaticAssets(path.join(__dirname, "swagger-ui-dist/"), {
+		prefix: "/swagger"
+	})
 
 	const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
 
