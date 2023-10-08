@@ -11,3 +11,17 @@ nestjs@^10 + typeorm@^0.3
 - [x] 基于 `passport-jwt` 的校验
 - [x] 基础 `auth` 接口模板
 - [x] 使用 `ncc` 进行打包
+
+## 使用
+
+```
+npm i // 安装依赖
+npm run dev // 开发
+
+npm run bundle // 打包成单文件
+docker build -t nest-template:1.0.0 . // 构建镜像
+```
+
+## 现存问题
+
+1. 当增加 enties 内容时，需要执行 scipts/generateEntityEntry.js 重新生成实体入口文件。

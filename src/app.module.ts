@@ -11,6 +11,7 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule } from './modules/session/session.module';
 import { CakesModule } from './modules/cakes/cakes.module';
+import Entities from './entities'
 
 @Module({
 	imports: [
@@ -36,7 +37,8 @@ import { CakesModule } from './modules/cakes/cakes.module';
 					configService.get<MysqlDatabaseConfiguration>('DB_CONFIG');
 				return {
 					type: 'mysql',
-					autoLoadEntities: true,
+					autoLoadEntities: false,
+					entities: Entities,
 					synchronize: dbConfig.synchronize,
 					host: dbConfig.host,
 					port: dbConfig.port,
