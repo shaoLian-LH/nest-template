@@ -16,6 +16,7 @@ import path = require('path');
 
 export const setAppConfigs = (app: INestApplication) => {
 	app.enableCors();
+	app.enableShutdownHooks(); // 开启优雅退出
 	// 接口参数检查
 	app.useGlobalPipes(
 		new ValidationPipe({
@@ -62,11 +63,14 @@ async function bootstrap() {
 	const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
 
 	await app.listen(appConfig.port).then(() => {
+		// lisenQuitEvent(app)
 		const swaggerTag = swaggerPrefix.replace(/^\//, '');
 		const swaggerAddress = `${protocolAndIp}:${appConfig.port}/${swaggerTag}`;
 		logger.log(
 			`${chalk.yellow('[SwaggerDocs]')} ${chalk.green(swaggerAddress)}`,
 		);
 	});
+
+
 }
 bootstrap();

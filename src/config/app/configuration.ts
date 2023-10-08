@@ -24,7 +24,6 @@ export interface AppConfiguration {
 
 export interface Configuration {
 	APP: AppConfiguration;
-	DB_CONFIG: MysqlDatabaseConfiguration;
 	jwt: JwtConfiguration;
 }
 
@@ -33,16 +32,6 @@ export const configForTest = (): Configuration => ({
 		protocol: 'http',
 		ip: 'localhost',
 		port: 3000,
-	},
-	DB_CONFIG: {
-		host: '127.0.0.1',
-		port: 3307,
-		username: 'root',
-		password: '123456',
-		database: 'subject_test',
-		synchronize: true,
-		dropSchema: true,
-		debug: false,
 	},
 	jwt: {
 		secret: 'topSecret',
@@ -58,16 +47,6 @@ export const configForDevelopment = (): Configuration => ({
 		ip: 'localhost',
 		port: 3000,
 	},
-	DB_CONFIG: {
-		host: '127.0.0.1',
-		port: 3307,
-		username: 'root',
-		password: '123456',
-		database: 'subject',
-		synchronize: true,
-		dropSchema: false,
-		debug: false,
-	},
 	jwt: {
 		secret: 'topSecret',
 		signOptions: {
@@ -81,16 +60,6 @@ export const configForProduction = (): Configuration => ({
 		protocol: 'http',
 		ip: '0.0.0.0',
 		port: 3000,
-	},
-	DB_CONFIG: {
-		host: '127.0.0.1',
-		port: 3307,
-		username: 'root',
-		password: '123456',
-		database: 'subject_prod',
-		synchronize: false,
-		dropSchema: false,
-		debug: false,
 	},
 	jwt: {
 		secret: 'topSecret',
