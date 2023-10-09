@@ -13,6 +13,7 @@ import { AppConfiguration, Configuration } from './config/app/configuration';
 import { INestApplication } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import path = require('path');
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 
 export const setAppConfigs = (app: INestApplication) => {
 	app.enableCors();
@@ -62,8 +63,18 @@ async function bootstrap() {
 
 	const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
 
-	await app.listen(appConfig.port).then(() => {
-		// lisenQuitEvent(app)
+	// 微服务
+	app.connectMicroservice<MicroserviceOptions>({
+		transport: Transport.TCP,
+		options: {
+			host: 'localhost',
+			port: 3100
+		}
+	})
+
+	await app.startAllMicroservices();
+
+	await app.listen(3100).then(() => {
 		const swaggerTag = swaggerPrefix.replace(/^\//, '');
 		const swaggerAddress = `${protocolAndIp}:${appConfig.port}/${swaggerTag}`;
 		logger.log(
