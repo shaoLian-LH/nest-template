@@ -1,12 +1,32 @@
-version: '3'
-
+version: '3.1'
 services:
   db:
-    image: mysql:5.7.38
-    container_name: 'nestjs-db'
+    image: postgres:16.6
+    container_name: postgres_local_db
     restart: always
-    ports:
-      - '3307:3306'
     environment:
-      - MYSQL_ROOT_PASSWORD=123456
-      - TZ=Asia/Shanghai
+      TZ: Asia/Shanghai
+      PGTZ: Asia/Shanghai
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: myLocalPostgres
+      POSTGRES_DB: local-project
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./backup:/backup
+    networks:
+      - postgres_network
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  postgres_network:
+    driver: bridge

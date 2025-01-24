@@ -21,7 +21,3 @@ npm run dev // 开发
 npm run bundle // 打包成单文件
 docker build -t nest-template:1.0.0 . // 构建镜像
 ```
-
-## 现存问题
-
-1. 当增加 enties 内容时，需要执行 scipts/generateEntityEntry.js 重新生成实体入口文件。

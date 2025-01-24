@@ -12,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfiguration, Configuration } from './config/app/configuration';
 import { INestApplication } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import path = require('path');
+const path = require('node:path');
 
 export const setAppConfigs = (app: INestApplication) => {
 	app.enableCors();
@@ -25,8 +25,6 @@ export const setAppConfigs = (app: INestApplication) => {
 			exceptionFactory: i18nValidationErrorFactory, // i18n转换报错内容为对应语言
 		}),
 	);
-	// 设置所有接口前缀默认增加字段
-	app.setGlobalPrefix('/api');
 
 	app.useGlobalFilters(
 		new HttpExceptionFilter(), // 统一处理抛错
@@ -48,7 +46,7 @@ async function bootstrap() {
 
 	// api文档配置
 	const docsConfig = new DocumentBuilder()
-		.setTitle('nest-template')
+		.setTitle('nest-template-with-prisma')
 		.setDescription('nest template API description')
 		.setVersion('1.0.0')
 		.build();

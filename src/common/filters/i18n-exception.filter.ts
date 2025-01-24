@@ -4,8 +4,7 @@ import { I18nContext, I18nValidationException } from 'nestjs-i18n';
 
 @Catch(I18nValidationException)
 export class I18nExceptionFilter<T extends I18nValidationException>
-	implements ExceptionFilter
-{
+	implements ExceptionFilter {
 	catch(exception: T, host: ArgumentsHost) {
 		if (!(exception instanceof I18nValidationException)) return;
 
@@ -28,7 +27,7 @@ export class I18nExceptionFilter<T extends I18nValidationException>
 				}
 				if (transContent.includes('|{')) {
 					const newContents = transContent.split('|');
-					return i18n.t(newContents[0], JSON.parse(newContents[1]) as any);
+					return i18n.t(newContents[0], { args: JSON.parse(newContents[1]) as any });
 				}
 				return i18n.t(transContent, { args });
 			})

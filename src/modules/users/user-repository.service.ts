@@ -1,34 +1,44 @@
 import { CommonHttpException } from '../../common/advance/http-exception.v1.exception';
-import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '../../entities/user.entity';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { HTTP_ERROR_FLAG } from '../../common/enumeration/custom-http.enum';
+import { PrismaService } from '../../prisma/prisma.service';
+import { IdGeneratorService } from '../common/id-generator.service';
+import { User } from '@prisma/client';
+import { BaseRepository } from '../../common/base/base.repository';
 
 @Injectable()
-export class UserRepositoryService extends Repository<User> {
-	constructor(private readonly dataSource: DataSource) {
-		super(User, dataSource.createEntityManager());
+export class UserRepositoryService extends BaseRepository<'User', User> {
+	protected readonly modelName = 'User' as const;
+
+	constructor(
+		protected readonly prisma: PrismaService,
+		private idGeneratorService: IdGeneratorService,
+	) {
+		super(prisma);
 	}
 
 	async register(userData: CreateUserDto): Promise<User> {
 		const hasExisted = await this.findOne({
-			where: {
-				username: userData.username,
-				deleted: 0,
-			},
+			name: userData.name
 		});
 
 		if (hasExisted) {
 			throw new CommonHttpException<HttpStatus.CREATED>(
 				HTTP_ERROR_FLAG.CREATED,
-				{ entity: 'user', value: userData.username },
+				{ entity: 'user', value: userData.name },
 			);
 		}
 
-		const newUser = this.create(userData);
-		await this.save(newUser);
+		return this.create({
+			...userData,
+			id: this.idGeneratorService.id,
+			createdBy: 'self'
+		});
+	}
 
-		return newUser;
+	async listUsers(): Promise<Array<User>> {
+		return this.findMany({});
 	}
 }
+

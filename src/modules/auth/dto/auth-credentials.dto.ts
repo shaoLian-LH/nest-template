@@ -4,20 +4,28 @@ import { i18nValidationMessage } from 'nestjs-i18n';
 export class AuthCredentialsDto {
 	@IsString({
 		message: i18nValidationMessage('common.TYPE_STRING', {
-			property: 'username',
+			property: 'name',
 		}),
 	})
-	@MinLength(5)
-	@MaxLength(20)
-	username: string;
+	@MinLength(5, {
+		message: i18nValidationMessage('common.MIN', { property: 'name' })
+	})
+	@MaxLength(20, {
+		message: i18nValidationMessage('common.MAX', { property: 'name' })
+	})
+	name: string;
 
 	@IsString({
 		message: i18nValidationMessage('common.TYPE_STRING', {
 			property: 'password',
 		}),
 	})
-	@MinLength(8)
-	@MaxLength(32)
+	@MinLength(8, {
+		message: i18nValidationMessage('common.MIN', { property: 'password' })
+	})
+	@MaxLength(32, {
+		message: i18nValidationMessage('common.MAX', { property: 'password' })
+	})
 	@Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, {
 		message: i18nValidationMessage('common.AUTH_SIGN_UP'),
 	})

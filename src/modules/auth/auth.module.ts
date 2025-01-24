@@ -1,4 +1,3 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -11,7 +10,7 @@ import {
 } from '../../config/app/configuration';
 import { UserRepositoryService } from '../users/user-repository.service';
 import { JwtStrategy } from './jwt.strategy';
-import { User } from '../../entities/user.entity';
+import { IdGeneratorService } from '../common/id-generator.service';
 
 @Module({
 	imports: [
@@ -27,11 +26,10 @@ import { User } from '../../entities/user.entity';
 					signOptions: jwtConfiguration.signOptions,
 				};
 			},
-		}),
-		TypeOrmModule.forFeature([User]),
+		})
 	],
-	providers: [UserRepositoryService, AuthService, JwtStrategy],
+	providers: [UserRepositoryService, AuthService, JwtStrategy, IdGeneratorService],
 	controllers: [AuthController],
 	exports: [AuthService, JwtStrategy, PassportModule],
 })
-export class AuthModule {}
+export class AuthModule { }

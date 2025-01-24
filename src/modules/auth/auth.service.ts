@@ -13,17 +13,17 @@ export class AuthService {
 	constructor(
 		private readonly userRepositoryService: UserRepositoryService,
 		private readonly jwtService: JwtService,
-	) {}
+	) { }
 
 	async signup(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
-		const { username, password } = authCredentialsDto;
+		const { name, password } = authCredentialsDto;
 		const salt = genSaltSync();
 		const saltedPassword = hashSync(password, salt);
 		const newUser = await this.userRepositoryService.register({
-			username: username,
+			name: name,
 			password: saltedPassword,
 		});
-		const token = this.signJwt({ username: newUser.username });
+		const token = this.signJwt({ name: newUser.name });
 		return { token };
 	}
 
@@ -32,9 +32,9 @@ export class AuthService {
 	}
 
 	async signIn(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
-		const { username, password } = authCredentialsDto;
+		const { name, password } = authCredentialsDto;
 		const userInfo = await this.userRepositoryService.findOne({
-			where: { username },
+			name,
 		});
 
 		if (!userInfo) {
@@ -47,7 +47,7 @@ export class AuthService {
 		const comparedResult = compareSync(password, userInfo.password);
 
 		if (comparedResult) {
-			const accessToken = this.signJwt({ username });
+			const accessToken = this.signJwt({ name: userInfo.name });
 			return { token: accessToken };
 		}
 
