@@ -16,7 +16,7 @@
 		"bundle": "ncc build --no-cache --target es2015 dist/main.js -o build -m",
 		"postbundle": "node ./scripts/postbundle.js",
 		"format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-		"dev": "nest start --watch",
+		"dev": "rimraf dist && nest start --watch",
 		"docker:dev": "docker-compose -f docker-compose.dev.yaml up -d",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",

@@ -5,7 +5,7 @@
 	"compilerOptions": {
 		"assets": [
 			{
-				"include": "i18n/**/**/*",
+				"include": "config/**/**/*",
 				"watchAssets": true
 			}
 		]
