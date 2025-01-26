@@ -1,10 +1,34 @@
-FROM node:18-alpine
+FROM node:20-alpine AS builder
 
-ENV NODE_ENV production
+# 安装必要的依赖
+RUN apk add --no-cache openssl openssl-dev
+
 WORKDIR /usr/src/app
-COPY ./package.json .
-COPY ./package-lock.json .
-COPY ./build ./build
 
-expose 3000
-CMD [ "node", "build/index.js" ]
+COPY . .
+
+
+RUN npm install -g pnpm
+RUN pnpm install
+
+ENV NODE_ENV=production
+RUN npx prisma generate
+RUN pnpm run bundle
+
+# 使用新的阶段来运行应用
+FROM node:20-alpine
+
+RUN apk add --no-cache openssl openssl-dev
+
+WORKDIR /usr/src/app
+
+ENV NODE_ENV=production
+
+# 从 builder 阶段复制必要文件
+COPY --from=builder /usr/src/app/build ./build
+COPY --from=builder /usr/src/app/.env* .
+
+EXPOSE 3001
+
+# 普通启动命令
+CMD ["node", "build/index.js"]

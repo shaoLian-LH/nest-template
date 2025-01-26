@@ -31,5 +31,15 @@ const copyConfigFromDist = () => {
 	})
 }
 
+const patchNodeFileToRootDir = () => {
+	const bundleClientDist = path.join(__dirname, '../build/client');
+	const rootDir = path.join(__dirname, '../build');
+	fs.readdirSync(bundleClientDist).forEach(file => {
+		fs.copySync(path.join(bundleClientDist, file), path.join(rootDir, file));
+	})
+	fs.removeSync(bundleClientDist);
+}
+
 copySwaggerUIDist();
 copyConfigFromDist();
+patchNodeFileToRootDir();

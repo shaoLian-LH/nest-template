@@ -15,8 +15,7 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./backup:/backup
-    networks:
-      - postgres_network
+    network_mode: "host"
     # healthcheck:
     #   test: [ "CMD-SHELL", "pg_isready -U postgres" ]
     #   interval: 10s
@@ -26,7 +25,3 @@ services:
 volumes:
   postgres-data:
     driver: local
-
-networks:
-  postgres_network:
-    driver: bridge

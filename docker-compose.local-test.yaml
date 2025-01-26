@@ -1,0 +1,5 @@
+version: '3.8'
+services:
+  app:
+    image: local-nest:latest
+    network_mode: 'host'

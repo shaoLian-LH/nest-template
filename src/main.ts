@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfiguration, Configuration } from './config/app/configuration';
 import { INestApplication } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
+const dotEnv = require('dotenv');
 const path = require('node:path');
 
 export const setAppConfigs = (app: INestApplication) => {
@@ -37,8 +38,31 @@ export const setAppConfigs = (app: INestApplication) => {
 };
 
 async function bootstrap() {
+	// 加载环境变量，优先加载 .env，然后根据环境加载对应的配置
+	dotEnv.config({ override: true });
+	if (process.env.NODE_ENV) {
+		dotEnv.config({
+			path: `.env.${process.env.NODE_ENV.toLowerCase()}`,
+			override: true,
+		});
+	}
+
 	const logger = new Logger();
-	const app: NestExpressApplication = await NestFactory.create(AppModule);
+	// 添加全局未捕获异常处理
+	process.on('unhandledRejection', (reason, promise) => {
+		logger.error(`未捕获的Promise异常: ${reason}`, promise);
+	});
+
+	process.on('uncaughtException', (error) => {
+		logger.error(`未捕获的异常: ${error.message}`, error.stack);
+		// 给进程一些时间来记录错误
+		setTimeout(() => process.exit(1), 1000);
+	});
+
+	const app: NestExpressApplication = await NestFactory.create(AppModule, {
+		logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+	});
+
 	const configService = app.get<ConfigService<Configuration>>(ConfigService);
 	const appConfig = configService.get<AppConfiguration>('APP');
 
@@ -59,12 +83,18 @@ async function bootstrap() {
 
 	const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
 
-	await app.listen(appConfig.port).then(() => {
+	console.log('port - ', process.env.SERVICE_PORT);
+	const port = process.env.SERVICE_PORT || 3000;
+	await app.listen(port).then(() => {
 		const swaggerTag = swaggerPrefix.replace(/^\//, '');
-		const swaggerAddress = `${protocolAndIp}:${appConfig.port}/${swaggerTag}`;
+		const swaggerAddress = `${protocolAndIp}:${port}/${swaggerTag}`;
 		logger.log(
 			`${chalk.yellow('[SwaggerDocs]')} ${chalk.green(swaggerAddress)}`,
 		);
+		logger.log(`应用成功启动于端口: ${port}`);
+	}).catch((error) => {
+		logger.error(`应用启动失败: ${error.message}`, error.stack);
+		throw error;
 	});
 }
 bootstrap();

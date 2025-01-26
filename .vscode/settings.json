@@ -3,6 +3,7 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.importModuleSpecifier": "relative",
   "cSpell.words": [
-    "Aadmin"
+    "Aadmin",
+    "postbundle"
   ]
 }
