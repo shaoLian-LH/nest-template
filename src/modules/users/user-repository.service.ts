@@ -3,9 +3,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { HTTP_ERROR_FLAG } from '../../common/enumeration/custom-http.enum';
 import { PrismaService } from '../../prisma/prisma.service';
-import { IdGeneratorService } from '../common/id-generator.service';
 import { User } from '@prisma/client';
 import { BaseRepository } from '../../common/base/base.repository';
+import { snowflakeInstance } from '../../utils/snowflake';
 
 @Injectable()
 export class UserRepositoryService extends BaseRepository<'User', User> {
@@ -13,7 +13,6 @@ export class UserRepositoryService extends BaseRepository<'User', User> {
 
 	constructor(
 		protected readonly prisma: PrismaService,
-		private idGeneratorService: IdGeneratorService,
 	) {
 		super(prisma);
 	}
@@ -30,9 +29,11 @@ export class UserRepositoryService extends BaseRepository<'User', User> {
 			);
 		}
 
+		const userId = await snowflakeInstance.nextId({ moduleName: this.modelName });
+
 		return this.create({
 			...userData,
-			id: this.idGeneratorService.id,
+			id: userId,
 			createdBy: 'self'
 		});
 	}

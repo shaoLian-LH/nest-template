@@ -158,7 +158,7 @@ export abstract class BaseRepository<
 	async executeTransaction<P>(
 		fn: (prisma: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use'>) => Promise<P>,
 	): Promise<P> {
-		return this.prisma.$transaction(fn);
+		return this.prisma.$transaction(fn as any) as Promise<P>;
 	}
 	// #endregion
 

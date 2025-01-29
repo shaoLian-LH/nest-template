@@ -4,12 +4,12 @@ import { Module } from '@nestjs/common';
 import { I18nModule, QueryResolver, AcceptLanguageResolver } from 'nestjs-i18n';
 import { join } from 'path';
 import { loadConfig } from './config/app/configuration';
-import { SessionModule } from './modules/session/session.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
+			isGlobal: true,
 			load: loadConfig(),
 		}),
 		I18nModule.forRoot({

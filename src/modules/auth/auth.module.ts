@@ -1,4 +1,4 @@
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -10,14 +10,12 @@ import {
 } from '../../config/app/configuration';
 import { UserRepositoryService } from '../users/user-repository.service';
 import { JwtStrategy } from './jwt.strategy';
-import { IdGeneratorService } from '../common/id-generator.service';
 
 @Module({
 	imports: [
-		ConfigModule,
 		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.registerAsync({
-			imports: [ConfigModule],
+			imports: [],
 			inject: [ConfigService],
 			useFactory: (configService: ConfigService<Configuration>) => {
 				const jwtConfiguration = configService.get<JwtConfiguration>('jwt');
@@ -26,9 +24,9 @@ import { IdGeneratorService } from '../common/id-generator.service';
 					signOptions: jwtConfiguration.signOptions,
 				};
 			},
-		})
+		}),
 	],
-	providers: [UserRepositoryService, AuthService, JwtStrategy, IdGeneratorService],
+	providers: [UserRepositoryService, AuthService, JwtStrategy],
 	controllers: [AuthController],
 	exports: [AuthService, JwtStrategy, PassportModule],
 })

@@ -12,7 +12,7 @@ RUN npm install -g pnpm
 RUN pnpm install
 
 ENV NODE_ENV=production
-RUN npx prisma generate
+RUN pnpm run prisma:generate
 RUN pnpm run bundle
 
 # 使用新的阶段来运行应用

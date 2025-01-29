@@ -83,7 +83,6 @@ async function bootstrap() {
 
 	const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
 
-	console.log('port - ', process.env.SERVICE_PORT);
 	const port = process.env.SERVICE_PORT || 3000;
 	await app.listen(port).then(() => {
 		const swaggerTag = swaggerPrefix.replace(/^\//, '');
