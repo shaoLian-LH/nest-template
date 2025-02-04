@@ -29,7 +29,7 @@ export class UserRepositoryService extends BaseRepository<'User', User> {
 			);
 		}
 
-		const userId = await snowflakeInstance.nextId({ moduleName: this.modelName });
+		const userId = snowflakeInstance.nextId(this.modelName);
 
 		return this.create({
 			...userData,
@@ -38,8 +38,24 @@ export class UserRepositoryService extends BaseRepository<'User', User> {
 		});
 	}
 
-	async listUsers(): Promise<Array<User>> {
-		return this.findMany({});
+	async listUsers(): Promise<Omit<User, 'password'>[]> {
+		return this.findMany({
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				sex: true,
+				age: true,
+				phone: true,
+				avatar: true,
+				forbidden: true,
+				deleted: true,
+				createdAt: true,
+				createdBy: true,
+				updatedAt: true,
+				updatedBy: true
+			}
+		});
 	}
 }
 

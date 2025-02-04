@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        BigInt   @id @db.BigInt
+  id        String   @id
   email     String?  @unique
   name      String?
   password  String

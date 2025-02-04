@@ -38,6 +38,12 @@ importers:
       '@prisma/client':
         specifier: ^6.2.1
         version: 6.2.1(prisma@6.3.0(typescript@5.7.3))
+      '@sapphire/snowflake':
+        specifier: ^3.5.5
+        version: 3.5.5
+      '@vercel/ncc':
+        specifier: ^0.38.3
+        version: 0.38.3
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -53,6 +59,9 @@ importers:
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
+      dotenv-cli:
+        specifier: ^8.0.0
+        version: 8.0.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -65,6 +74,9 @@ importers:
       passport-jwt:
         specifier: ^4.0.1
         version: 4.0.1
+      prisma:
+        specifier: ^6.3.0
+        version: 6.3.0(typescript@5.7.3)
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -117,12 +129,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.21.0
         version: 8.21.0(eslint@9.18.0)(typescript@5.7.3)
-      '@vercel/ncc':
-        specifier: ^0.38.3
-        version: 0.38.3
-      dotenv-cli:
-        specifier: ^8.0.0
-        version: 8.0.0
       eslint:
         specifier: ^9.18.0
         version: 9.18.0
@@ -138,9 +144,6 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
-      prisma:
-        specifier: ^6.3.0
-        version: 6.3.0(typescript@5.7.3)
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -774,6 +777,10 @@ packages:
 
   '@prisma/get-platform@6.3.0':
     resolution: {integrity: sha512-V8zZ1d0xfyi6FjpNP4AcYuwSpGcdmu35OXWnTPm8IW594PYALzKXHwIa9+o0f+Lo9AecFWrwrwaoYe56UNfTtQ==}
+
+  '@sapphire/snowflake@3.5.5':
+    resolution: {integrity: sha512-xzvBr1Q1c4lCe7i6sRnrofxeO1QTP/LKQ6A6qy0iB4x5yfiSfARMEQEghojzTNALDTcv8En04qYNIco9/K9eZQ==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
@@ -4252,6 +4259,8 @@ snapshots:
   '@prisma/get-platform@6.3.0':
     dependencies:
       '@prisma/debug': 6.3.0
+
+  '@sapphire/snowflake@3.5.5': {}
 
   '@scarf/scarf@1.4.0': {}
 

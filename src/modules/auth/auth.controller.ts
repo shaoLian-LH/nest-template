@@ -9,8 +9,13 @@ import { V1Controller } from '../../common/decorators/v1.decorator';
 export class AuthController {
 	constructor(private readonly authService: AuthService) { }
 
-	@Post()
+	@Post('/actions/sign-up')
 	signup(@Body() authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
 		return this.authService.signup(authCredentialsDto);
+	}
+
+	@Post('/actions/sign-in')
+	signin(@Body() authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
+		return this.authService.signin(authCredentialsDto);
 	}
 }

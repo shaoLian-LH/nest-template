@@ -73,6 +73,16 @@ async function bootstrap() {
 		.setTitle('nest-template-with-prisma')
 		.setDescription('nest template API description')
 		.setVersion('1.0.0')
+		.addBearerAuth(
+			{
+				type: 'http',
+				scheme: 'bearer',
+				bearerFormat: 'JWT',
+				name: 'Authorization',
+				description: '请输入 JWT token',
+			},
+			'Authorization',
+		)
 		.build();
 	const docs = SwaggerModule.createDocument(app, docsConfig);
 	const swaggerPrefix = '/swagger';

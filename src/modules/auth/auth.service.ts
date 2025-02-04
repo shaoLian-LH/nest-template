@@ -31,7 +31,7 @@ export class AuthService {
 		return this.jwtService.sign(baseData);
 	}
 
-	async signIn(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
+	async signin(authCredentialsDto: AuthCredentialsDto): Promise<SignResult> {
 		const { name, password } = authCredentialsDto;
 		const userInfo = await this.userRepositoryService.findOne({
 			name,

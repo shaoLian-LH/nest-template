@@ -10,7 +10,7 @@ export class UserService {
 		return this.userRepository.register(userData);
 	}
 
-	async listUsers(): Promise<Array<User>> {
+	async listUsers(): Promise<Omit<User, 'password'>[]> {
 		return this.userRepository.listUsers();
 	}
 }

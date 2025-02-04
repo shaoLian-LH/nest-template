@@ -5,9 +5,9 @@ import { SignResult } from '../auth/types';
 
 @Injectable()
 export class SessionService {
-	constructor(private readonly authService: AuthService) {}
+	constructor(private readonly authService: AuthService) { }
 
 	async login(authCredentials: AuthCredentialsDto): Promise<SignResult> {
-		return this.authService.signIn(authCredentials);
+		return this.authService.signin(authCredentials);
 	}
 }
