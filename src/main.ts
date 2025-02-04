@@ -69,10 +69,11 @@ async function bootstrap() {
 	setAppConfigs(app);
 
 	// api文档配置
+	const docVersion = '1.0.0';
 	const docsConfig = new DocumentBuilder()
 		.setTitle('nest-template-with-prisma')
 		.setDescription('nest template API description')
-		.setVersion('1.0.0')
+		.setVersion(docVersion)
 		.addBearerAuth(
 			{
 				type: 'http',
@@ -80,6 +81,7 @@ async function bootstrap() {
 				bearerFormat: 'JWT',
 				name: 'Authorization',
 				description: '请输入 JWT token',
+				in: 'header',
 			},
 			'Authorization',
 		)
@@ -87,18 +89,27 @@ async function bootstrap() {
 	const docs = SwaggerModule.createDocument(app, docsConfig);
 	const swaggerPrefix = '/swagger';
 	SwaggerModule.setup(swaggerPrefix, app, docs);
-	app.useStaticAssets(path.join(__dirname, "swagger-ui-dist/"), {
-		prefix: "/swagger"
+
+	app.useStaticAssets(path.join(__dirname, '..', "public/doc"), {
+		prefix: '/doc'
 	})
 
 	const protocolAndIp = `${appConfig.protocol}://${appConfig.ip}`;
-
 	const port = process.env.SERVICE_PORT || 3000;
+	app.use('/services.json', function (req, res) {
+		res.send([{
+			name: 'API 文档',
+			url: `${protocolAndIp}:${port}${swaggerPrefix}-json`,
+			swaggerVersion: docVersion,
+			location: swaggerPrefix
+		}]);
+	});
+
+
 	await app.listen(port).then(() => {
-		const swaggerTag = swaggerPrefix.replace(/^\//, '');
-		const swaggerAddress = `${protocolAndIp}:${port}/${swaggerTag}`;
+		const knife4jAddress = `${protocolAndIp}:${port}/doc/index.html`;
 		logger.log(
-			`${chalk.yellow('[SwaggerDocs]')} ${chalk.green(swaggerAddress)}`,
+			`${chalk.yellow('[knife4jDocs]')} ${chalk.green(knife4jAddress)}`,
 		);
 		logger.log(`应用成功启动于端口: ${port}`);
 	}).catch((error) => {

@@ -52,6 +52,7 @@
 		"dotenv": "^16.4.7",
 		"dotenv-cli": "^8.0.0",
 		"lodash": "^4.17.21",
+		"nest-knife4j": "^1.0.1",
 		"nestjs-i18n": "^10.5.0",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",

@@ -27,7 +27,7 @@ ENV NODE_ENV=production
 # 从 builder 阶段复制必要文件
 COPY --from=builder /usr/src/app/build ./build
 COPY --from=builder /usr/src/app/.env* .
-
+COPY --from=builder /usr/src/app/public ./public
 EXPOSE 3001
 
 # 普通启动命令
