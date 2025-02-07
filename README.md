@@ -1,6 +1,6 @@
 # nest-template
 
-nestjs@^10 + typeorm@^0.3
+nestjs@^11 + prisma@^6 + knife4j
 
 ## 预置内容
 
