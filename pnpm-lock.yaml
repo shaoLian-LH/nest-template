@@ -65,9 +65,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      nest-knife4j:
-        specifier: ^1.0.1
-        version: 1.0.1(@types/express@5.0.0)(express@5.0.1)
       nestjs-i18n:
         specifier: ^10.5.0
         version: 10.5.0(@nestjs/common@11.0.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.4)(class-validator@0.14.1)(rxjs@7.8.1)
@@ -2576,12 +2573,6 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  nest-knife4j@1.0.1:
-    resolution: {integrity: sha512-TD1LmxzclBddOygIDIRjr3jIwj+C3dp69G4Sy+QwAiiuQQQAxwaGXioCB3ibr/SLQ9nuR8klYehzS3HjS32Nfw==}
-    peerDependencies:
-      '@types/express': ^4.17.11
-      express: ^4.17.1
-
   nestjs-i18n@10.5.0:
     resolution: {integrity: sha512-Pf95sOk9NiNdEakEEuoxzM8W5Nnt/jj1TavbHeId05aIdTnR6slrvGD4mEur+1fudplrTRa7g/XA0gh5GZ30aw==}
     engines: {node: '>=18'}
@@ -3333,9 +3324,6 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
-
-  user@0.0.0:
-    resolution: {integrity: sha512-eRNM5isOvr6aEFAGi1CqAkmLkYxW2NJ5ThhbD+6IJXYKM1mo7Gtxx4mQIveHz/5K3p/SVnlW9k17ETn+QAu8IQ==}
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -6414,12 +6402,6 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  nest-knife4j@1.0.1(@types/express@5.0.0)(express@5.0.1):
-    dependencies:
-      '@types/express': 5.0.0
-      express: 5.0.1
-      user: 0.0.0
-
   nestjs-i18n@10.5.0(@nestjs/common@11.0.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.4)(class-validator@0.14.1)(rxjs@7.8.1):
     dependencies:
       '@nestjs/common': 11.0.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -7234,8 +7216,6 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
-
-  user@0.0.0: {}
 
   util-deprecate@1.0.2: {}
 
