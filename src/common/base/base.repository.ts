@@ -8,11 +8,11 @@ type PrismaModel = keyof typeof Prisma.ModelName;
 export abstract class BaseRepository<
 	ModelType extends PrismaModel,
 	T = any,
-	WhereInput = Prisma.Args<PrismaClient[Lowercase<ModelType>], 'findFirst'>['where'],
-	CreateInput = Prisma.Args<PrismaClient[Lowercase<ModelType>], 'create'>['data'],
-	UpdateInput = Prisma.Args<PrismaClient[Lowercase<ModelType>], 'update'>['data'],
-	OrderByInput = Prisma.Args<PrismaClient[Lowercase<ModelType>], 'findFirst'>['orderBy'],
-	SelectInput = Prisma.Args<PrismaClient[Lowercase<ModelType>], 'findFirst'>['select']
+	WhereInput = Prisma.TypeMap['model'][ModelType]['operations']['findFirst']['args']['where'],
+	CreateInput = Prisma.TypeMap['model'][ModelType]['operations']['create']['args']['data'],
+	UpdateInput = Prisma.TypeMap['model'][ModelType]['operations']['update']['args']['data'],
+	OrderByInput = Prisma.TypeMap['model'][ModelType]['operations']['findFirst']['args']['orderBy'],
+	SelectInput = Prisma.TypeMap['model'][ModelType]['operations']['findFirst']['args']['select']
 > {
 	protected abstract readonly modelName: ModelType;
 
