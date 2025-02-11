@@ -34,7 +34,7 @@ export class UserRepositoryService extends BaseRepository<'User', User> {
 		return this.create({
 			...userData,
 			id: userId,
-			createdBy: 'self'
+			createdBy: userId
 		});
 	}
 

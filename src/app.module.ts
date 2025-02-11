@@ -5,7 +5,8 @@ import { I18nModule, QueryResolver, AcceptLanguageResolver } from 'nestjs-i18n';
 import { join } from 'path';
 import { loadConfig } from './config/app/configuration';
 import { PrismaModule } from './prisma/prisma.module';
-
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -28,6 +29,11 @@ import { PrismaModule } from './prisma/prisma.module';
 		// SessionModule,
 	],
 	controllers: [],
-	providers: [],
+	providers: [
+		{
+			provide: APP_GUARD,
+			useClass: JwtAuthGuard,
+		},
+	],
 })
 export class AppModule { }
