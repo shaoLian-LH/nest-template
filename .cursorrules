@@ -1,0 +1,129 @@
+# Language Requirements
+1. All code comments should be written in Chinese.
+2. All communications and responses should be in Chinese.
+3. All documentation should be bilingual (Chinese primary, English secondary).
+
+# Project Architecture
+1. Follow NestJS module development specifications.
+2. All entities are implemented by Prisma, import from @prisma/client package.
+3. Each module must include:
+   - dto directory
+   - base repository service
+   - module file
+   - controller file
+   - service file
+4. Repository services must extend BaseRepository class with proper model name and type parameters.
+
+# Coding Standards
+1. Use TypeScript with strict type checking.
+2. Follow decorator pattern for feature extensions.
+3. Use V1Controller decorator for all controllers. The decorator has been implemented in `src/common/decorators/v1.decorator.ts`. And the controller just need to return the data, the data will be wrapped by the global response interceptor.
+4. All DTOs must implement class-validator decorations.
+5. Follow ESLint and Prettier configurations.
+6. Every Controller must have a swagger documentation and a success response class, the response class must extend BaseResponse class from '@/common/swagger/enhance', and the file should be created under the module folder like `src/modules/foo/foo.swagger.ts`. It will use entity to realize a new response definition, these is the example:
+```
+import { BaseResponse, PaginatedData } from '@/common/swagger/enhance';
+import { ApiProperty } from '@nestjs/swagger';
+import { Foo } from '@prisma/client';
+import { FooEntity } from '@/entities/foo.entity';
+
+export class FooResponse extends BaseResponse {
+	@ApiProperty({
+		type: () => FooEntity,
+		required: false,
+		nullable: true,
+	})
+	data: FooEntity | null;
+}
+
+export class FooListResponse extends BaseResponse {
+	@ApiProperty({
+		type: () => PaginatedData<FooEntity>,
+	})
+	data: PaginatedData<Foo>
+}
+```
+7. In some cases, the base response class is not enough, you should create a new response class based on the dto definition, and the file should be created under the module folder like `src/modules/foo/dto/create-foo.dto.ts`. It will use dto to realize a new response definition, and then use the dto to define the response class, these is the example:
+```
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+
+export class CreateFooDto {
+	@ApiProperty({ description: '名称', example: '全局设置' })
+	@IsNotEmpty()
+	@IsString()
+	name: string;
+}
+```
+8. When a controller has a pagination, you should use the pagination decorator to define the related parameters, decorator has been implemented in `src/common/decorators/pagination.decorator.ts`, Pagination class has realized the page, pageSize, skip and take, these is the example:
+```
+import { Pagination, PaginationParams } from '@/common/decorators/pagination.decorator';
+@Get('list')
+async getList(@PaginationParams() pagination: Pagination) {
+  return this.service.findMany(pagination);
+}
+```
+9. All the response type just service for swagger documentation, controller should return the data directly.
+10. Should use `@/utils/fetch.ts` when connect to other server for fetching online data. The fetch has implemented `getFetch`、`postFetch`、`putFetch` and `delFetch`.
+11. Should attention some important operator in CURD, try define the `dataResourceCheck` in method of service to check the resource is exist and belong to the current user.
+12. When should get user info, should use `@CurrentUser` decorator, and the decorator has been implemented in `src/common/decorators/current-user.decorator.ts`. These is the example:
+```
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import { User } from '@prisma/client';
+
+@Get('info')
+async getInfo(@CurrentUser() user: User) {
+  return this.service.getUserInfo(user.id);
+}
+```
+13. BaseRepository has been implemented in `src/common/base/base.repository.ts`, and the repository service should extend the BaseRepository class with proper model name and type parameters. All the new repository method should be added to this new repository file. These is the example:
+```
+import { Injectable } from '@nestjs/common';
+import { BaseRepository } from '@/common/base/base.repository';
+import { InfoFolderInfoRelation } from '@prisma/client';
+
+@Injectable()
+export class InfoFolderInfoRelationRepository extends BaseRepository<'InfoFolderInfoRelation', InfoFolderInfoRelation> {
+	protected readonly modelName = 'InfoFolderInfoRelation' as const;
+
+	// this is just an example, it means the new method should be added to this file
+	newMethod() {
+		return this.model.findMany({
+			where: {
+				deleted: false,
+			},
+		});
+	}
+}
+```
+14. BaseRepository has realized some basic operations, you should override the method when you need to customize the operation in extended repository service. BaseRepository should not be changed. When you find error in service realization, you should check the BaseRepository first.
+
+# Database Operations
+1. All database operations must go through Repository Service.
+2. Use snowflake utility for ID generation.
+3. Implement soft delete using 'deleted' field.
+4. Track creation and update metadata:
+   - createdAt
+   - createdBy
+   - updatedAt
+   - updatedBy
+5. createdBy and updatedBy should be the user id.
+6. The default page size is 10 and the default page is 1.
+7. All the entities class should be implemented by Prisma, and import from @prisma/client package, when change the schema in prisma/schema.prisma, you should also change the entity class in src/entities directory.
+
+# API Standards
+1. Follow RESTful API design principles.
+2. Use WrapResponseInterceptor for consistent response format.
+3. Implement error handling through HttpExceptionFilter.
+4. Support i18n through I18nExceptionFilter.
+5. Use Swagger decorators for API documentation.
+
+# Testing Guidelines
+1. Write e2e tests for all endpoints.
+2. Manage test data through fixtures.
+3. Maintain separate test environment configurations.
+4. Follow Jest testing patterns.
+
+# Security
+1. Use proper validation for all inputs.
+2. Follow security best practices for NestJS applications.
