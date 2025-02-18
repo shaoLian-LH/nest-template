@@ -15,9 +15,10 @@ nestjs@^11 + prisma@^6 + knife4j
 ## 使用
 
 ```
-npm i // 安装依赖
-npm run dev // 开发
+pnpm i // 安装依赖
+pnpm run prisma:generate:dev // 生成 prisma 声明文件（开发时）
+pnpm run dev // 开发
 
-npm run bundle // 打包成单文件
-docker build -t nest-template:1.0.0 . // 构建镜像
+pnpm run bundle // 打包成单文件
+pnpm run build:docker // 构建镜像
 ```
