@@ -10,8 +10,8 @@
 		"pnpm": ">=9.0.0"
 	},
 	"scripts": {
-		"prisma:generate": "dotenv -e .env.production -- npx prisma generate",
-		"prisma:generate:dev": "dotenv -e .env.development -- npx prisma generate",
+		"prisma:g": "dotenv -e .env.production -- npx prisma generate",
+		"prisma:g:dev": "dotenv -e .env.development -- npx prisma generate",
 		"prebuild": "rimraf dist",
 		"build": "dotenv -e .env.production -- npx nest build",
 		"build:docker": "docker build . -t local-nest:latest --progress=plain --no-cache",
