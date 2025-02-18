@@ -13,12 +13,10 @@ nestjs@^11 + prisma@^6 + knife4j
 - [x] 使用 `ncc` 进行打包
 
 ## 使用
-
-```
-pnpm i // 安装依赖
-pnpm run prisma:g:dev // 生成 prisma 声明文件（开发时）
-pnpm run dev // 开发
-
-pnpm run bundle // 打包成单文件
-pnpm run build:docker // 构建镜像
-```
+1. 启动本地数据库：`docker-compose -f docker-compose.db-example.yaml up -d`
+	- 如果需要使用其他数据库或修改了默认端口等配置，请修改 `.env.development` 中的 `DATABASE_URL` 配置
+2. 安装依赖：`pnpm i`
+3. 生成 prisma 声明文件：`pnpm run prisma:g:dev`
+4. 开发：`pnpm run dev`
+5. 打包：`pnpm run bundle`
+6. 构建镜像：`pnpm run build:docker`
